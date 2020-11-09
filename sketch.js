@@ -15,6 +15,7 @@ function preload() {
     sky14 = loadImage('images/sky14.jpg');
     sky15 = loadImage('images/sky15.jpg');
     sky16 = loadImage('images/sky16.jpg');
+    front = loadImage('images/circle.jpg');
 
 }
 
@@ -41,5 +42,38 @@ function draw() {
     image(sky14, 250, 750, 250, 250);
     image(sky15, 500, 750, 250, 250);
     image(sky16, 750, 750, 250, 250);
+    
+    frame();
+    
+    //little controller;
+    let theta = atan2(mouseY - height / 2, mouseX - width / 2);
+    
+    let ballX = map(cos(theta), -1, 1, 0, width);
+    let ballY = map(sin(theta), -1, 1, 0, height);
+  
+    noStroke();
+    fill(220, 220, 120);
+    circle(ballX, ballY, 25);
+}
 
+function frame() {
+    image(front, 0, 0, width, height);
+  
+  front.loadPixels();
+    for (var fy = 0; fy < front.height; fy++) {
+      for (var fx = 0; fx < front.width; fx++) {
+        var index = (fx + fy * front.width)*4;
+        
+        let fr = front.pixels[index+0];
+        let fg = front.pixels[index+1];
+        let fb = front.pixels[index+2];
+        let fa = front.pixels[index+3];   
+        
+        if (fr > 200 && fg < 200 && fb < 200) {
+          
+          front.pixels[index+3] = 0;
+        }
+      }
+    }
+  front.updatePixels();
 }
