@@ -39,28 +39,28 @@ function preload() {
 
 
 function setup() {
-    createCanvas(1000, 1000);
+    createCanvas(800, 800);
     frameRate(5);
 }
 
 function draw() {
     background(220);
-    image(sky1, 0, 0, 250, 250);
-    image(sky2, 250, 0, 250, 250);
-    image(sky3, 500, 0, 250, 250);
-    image(sky4, 750, 0, 250, 250);
-    image(sky5, 0, 250, 250, 250);
-    image(sky6, 250, 250, 250, 250);
-    image(sky7, 500, 250, 250, 250);
-    image(sky8, 750, 250, 250, 250);
-    image(sky9, 0, 500, 250, 250);
-    image(sky10, 250, 500, 250, 250);
-    image(sky11, 500, 500, 250, 250);
-    image(sky12, 750, 500, 250, 250);
-    image(sky13, 0, 750, 250, 250);
-    image(sky14, 250, 750, 250, 250);
-    image(sky15, 500, 750, 250, 250);
-    image(sky16, 750, 750, 250, 250);
+    image(sky1, 40, 30, 200, 200);
+    image(sky2, 200, 0, 200, 200);
+    image(sky3, 390, 0, 200, 200);
+    image(sky4, 585, 50, 200, 200);
+    image(sky16, 0, 205, 200, 200);
+    image(sky6, 197, 200, 200, 200);
+    image(sky8, 605, 220, 200, 200);
+    image(sky9, 0, 398, 200, 200);
+    image(sky11, 402, 399, 200, 200);
+    image(sky12, 600, 401, 200, 200);
+    image(sky13, 40, 595, 200, 200);
+    image(sky14, 220, 599, 200, 200);
+    image(sky5, 590, 590, 200, 200);
+    image(sky15, 402, 596, 210, 210);
+    image(sky7, 395, 197, 210, 210);
+    image(sky10, 196, 400, 208, 208);
     
     let theta = atan2(mouseY - height / 2, mouseX - width / 2);
     
@@ -73,6 +73,8 @@ function draw() {
         raining();        
     } else if (ballX > width/2 && ballY > height/2) {
         snowing();
+    } else if (ballX > width/2 && ballY < height/2) {
+        cloudy();
     }
     
     frame();
@@ -140,6 +142,81 @@ function raining() {
         }
     }
     updatePixels(); 
+}
+
+
+function cloudy() {
+    loadPixels();
+  
+  	for (var x = 0; x < width; x++) {
+    	for (var y = 0; y < height; y++) {
+                   
+            var index = (x + y * width)*4;
+  
+            let r = pixels[index+0];
+            let g = pixels[index+1];
+            let b = pixels[index+2];
+            let a = pixels[index+3];    
+          
+            let c = color(r, b, g, a);
+          
+            let bright = brightness(c);
+          
+          
+            if (bright>100) {
+                pixels[index+0] = 170;
+                pixels[index+1] = 175;
+                pixels[index+2] = 187;
+                pixels[index+3] = 200;   
+            } else if (bright > 90 && bright <= 100) {
+                pixels[index+0] = 202;
+                pixels[index+1] = 201;
+                pixels[index+2] = 200;
+                pixels[index+3] = 180;  
+            } else if (bright > 85 && bright <=90) {
+              pixels[index+0] = 227;
+                pixels[index+1] = 227;
+                pixels[index+2] = 227;
+                pixels[index+3] = 220;  
+            } else if (bright > 80 && bright <= 85) {
+                pixels[index+0] = 193;
+                pixels[index+1] = 190;
+                pixels[index+2] = 187;
+                pixels[index+3] = 180; 
+            } else if (bright > 75 && bright <= 80) {
+                pixels[index+0] = 219;
+                pixels[index+1] = 215;
+                pixels[index+2] = 220;
+                pixels[index+3] = 190; 
+            } else if (bright > 70 && bright <= 75) {
+                pixels[index+0] = 227;
+                pixels[index+1] = 227;
+                pixels[index+2] = 224;
+                pixels[index+3] = 198; 
+            } else if (bright > 60 && bright <= 70) {
+                pixels[index+0] = 200;
+                pixels[index+1] = 204;
+                pixels[index+2] = 198;
+                pixels[index+3] = 200; 
+            } else if (bright > 55 && bright <= 60) {
+                pixels[index+0] = 240;
+                pixels[index+1] = 236;
+                pixels[index+2] = 240;
+                pixels[index+3] = 170; 
+            }
+            
+            r = pixels[index+0];
+            g = pixels[index+1];
+            b = pixels[index+2];
+            a = pixels[index+3]; 
+          
+            pixels[index+0] = r - 45;
+            pixels[index+1] = g - 50;
+            pixels[index+2] = b - 45;
+            pixels[index+3] = 220;    
+        }
+    }
+    updatePixels();
 }
 
 
