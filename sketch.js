@@ -43,18 +43,56 @@ function draw() {
     image(sky15, 500, 750, 250, 250);
     image(sky16, 750, 750, 250, 250);
     
-    frame();
-    
-    //little controller;
     let theta = atan2(mouseY - height / 2, mouseX - width / 2);
     
     let ballX = map(cos(theta), -1, 1, 0, width);
     let ballY = map(sin(theta), -1, 1, 0, height);
+    
+    if (ballX < width/2 && ballY < height/2) {
+        sunset();
+    }
+    
+    frame();
+    
+    //little controller;
+
   
     noStroke();
     fill(220, 220, 120);
     circle(ballX, ballY, 25);
 }
+
+
+function sunset() {
+    loadPixels();
+    for (var y = 0; y < height; y++) {
+        for (var x = 0; x < width; x++) {
+            var index = (x + y * width)*4;
+        
+            let r = pixels[index+0];
+            let g = pixels[index+1];
+            let b = pixels[index+2];
+            let a = pixels[index+3];   
+        
+            if (b > 170 && r > 170 && g > 170) {
+            
+              pixels[index+0] = r + 100;
+              pixels[index+1] = g + 70;
+              pixels[index+2] = b - 30;
+              pixels[index+3] = 255;
+            } else if (b > 100){
+          
+              pixels[index+0] = 80 + r;
+              pixels[index+1] = g;
+              pixels[index+2] = b - 90;
+              pixels[index+3] = 255;
+            }
+          }
+        }
+    updatePixels();
+    
+}
+
 
 function frame() {
     image(front, 0, 0, width, height);
