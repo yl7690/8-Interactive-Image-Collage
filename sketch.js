@@ -15,6 +15,12 @@ let sky14;
 let sky15;
 let sky16;
 let front;
+let cloud;
+let sun;
+let rain;
+let snow;
+let fps = 60;
+
 
 function preload() {
     sky1 = loadImage('images/sky1.jpg');
@@ -34,14 +40,18 @@ function preload() {
     sky15 = loadImage('images/sky15.jpg');
     sky16 = loadImage('images/sky16.jpg');
     front = loadImage('images/circle.jpg');
-
+    cloud = loadImage('images/cloudEmoji.png');
+    sun = loadImage('images/sunEmoji.png');
+    rain = loadImage('images/rainEmoji.png');
+    snow = loadImage('images/snowEmoji.png');
 }
 
 
 function setup() {
     createCanvas(800, 800);
-    frameRate(5);
+    frameRate(fps);
 }
+
 
 function draw() {
     background(220);
@@ -70,7 +80,7 @@ function draw() {
     if (ballX < width/2 && ballY < height/2) {
         sunset();
     } else if (ballX < width/2 && ballY > height/2) {
-        raining();        
+        raining();    
     } else if (ballX > width/2 && ballY > height/2) {
         snowing();
     } else if (ballX > width/2 && ballY < height/2) {
@@ -79,16 +89,41 @@ function draw() {
     
     frame();
     
-    //little controller;
-
-  
-    noStroke();
-    fill(220, 220, 120);
-    circle(ballX, ballY, 25);
+    controller();;
 }
 
 
+//change the image that represents mouse position based on the different filter in use;
+//"sunset" = sun emoji;
+//"raining" = rainy emoji;
+//"snowing" = snow emoji;
+//"cloudy" = cloud emoji;
+function controller() {
+    push();
+    imageMode(CENTER);
+    
+    let theta = atan2(mouseY - height / 2, mouseX - width / 2);
+    
+    let ballX = map(cos(theta), -1, 1, 0, width);
+    let ballY = map(sin(theta), -1, 1, 0, height);
+    
+    if (ballX < width/2 && ballY < height/2) {
+        image(sun, ballX, ballY, 50, 50);
+    } else if (ballX < width/2 && ballY > height/2) {   
+        image(rain, ballX, ballY, 50, 50);
+    } else if (ballX > width/2 && ballY > height/2) {
+        image(snow, ballX, ballY, 50, 50);
+    } else if (ballX > width/2 && ballY < height/2) {
+        image(cloud, ballX, ballY, 50, 50);
+    }
+    pop();
+}
+
+
+//the filter "sunset"; make the selected color into yellowish;
 function sunset() {
+    fps = 60;
+    
     loadPixels();
     for (var y = 0; y < height; y++) {
         for (var x = 0; x < width; x++) {
@@ -100,13 +135,11 @@ function sunset() {
             let a = pixels[index+3];   
         
             if (b > 170 && r > 170 && g > 170) {
-            
                 pixels[index+0] = r + 100;
                 pixels[index+1] = g + 70;
                 pixels[index+2] = b - 30;
                 pixels[index+3] = 255;
             } else if (b > 100){
-          
                 pixels[index+0] = 80 + r;
                 pixels[index+1] = g;
                 pixels[index+2] = b - 90;
@@ -118,7 +151,10 @@ function sunset() {
 }
 
 
+//the filter "raining"; make the color of 1 to 10 pixels in the same column the same, giving a sense of movement;
 function raining() { 
+    fps = 6;
+    
     loadPixels();
     for (var y = 0; y < height; y++) {
         for (var x = 0; x < width; x++) {
@@ -145,9 +181,11 @@ function raining() {
 }
 
 
+//the filter "cloudy"; change the color of the pixels into different gray colors based on the brightness;
 function cloudy() {
+    fps = 60;
+    
     loadPixels();
-  
   	for (var x = 0; x < width; x++) {
     	for (var y = 0; y < height; y++) {
                    
@@ -220,9 +258,11 @@ function cloudy() {
 }
 
 
+//the filter "snowing"; change the color of random pixels into white, causing visual effect of snowing;
 function snowing() {
+    fps = 5;
+    
     loadPixels();
-  
     for (var x = 0; x < width; x++) {
         for (var y = 0; y < height; y++) {
           
@@ -264,7 +304,8 @@ function snowing() {
 }
 
 
-function frame() {
+//the white circle frame; 
+function frame() {    
     image(front, 0, 0, width, height);
   
     front.loadPixels();
