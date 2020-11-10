@@ -40,6 +40,7 @@ function preload() {
 
 function setup() {
     createCanvas(1000, 1000);
+    frameRate(5);
 }
 
 function draw() {
@@ -70,6 +71,8 @@ function draw() {
         sunset();
     } else if (ballX < width/2 && ballY > height/2) {
         raining();        
+    } else if (ballX > width/2 && ballY > height/2) {
+        snowing();
     }
     
     frame();
@@ -137,6 +140,50 @@ function raining() {
         }
     }
     updatePixels(); 
+}
+
+
+function snowing() {
+    loadPixels();
+  
+    for (var x = 0; x < width; x++) {
+        for (var y = 0; y < height; y++) {
+          
+            var index = (x + y * width)*4;
+  
+            let r = pixels[index+0];
+            let g = pixels[index+1];
+            let b = pixels[index+2];
+            let a = pixels[index+3];      
+          
+            pixels[index+0] = r + 50;
+            pixels[index+1] = g + 50;
+            pixels[index+2] = b + 50;
+            pixels[index+3] = 255;      
+        }
+    }
+  
+  
+  	for (var i = 0; i < width; i+=floor(random(2,6))) {
+    	for (var j = 0; j < height; j+=floor(random(2,5))) {
+          
+            let i = floor(random(width));
+            let j = floor(random(0, height));
+                   
+            var indexSnow = (i + j * width)*4;
+  
+            let sr = pixels[indexSnow+0];
+            let sg = pixels[indexSnow+1];
+            let sb = pixels[indexSnow+2];
+            let sa = pixels[indexSnow+3];      
+          
+            pixels[indexSnow+0] = 255;
+            pixels[indexSnow+1] = 255;
+            pixels[indexSnow+2] = 255;
+            pixels[indexSnow+3] = 255;      
+        }
+    }
+    updatePixels();
 }
 
 
